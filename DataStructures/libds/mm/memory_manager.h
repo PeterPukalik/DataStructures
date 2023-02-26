@@ -1,8 +1,6 @@
 #pragma once
 
-#if defined(_WIN32) || defined(_WIN64) || !defined(__CYGWIN__)
 #include <libds/heap_monitor.h>
-#endif
 
 namespace ds::mm {
 
@@ -25,40 +23,40 @@ namespace ds::mm {
 	};
 
 	template<typename BlockType>
-    MemoryManager<BlockType>::MemoryManager():
+	MemoryManager<BlockType>::MemoryManager() :
 		allocatedBlockCount_(0)
 	{
 	}
 
 	template<typename BlockType>
-    MemoryManager<BlockType>::~MemoryManager()
+	MemoryManager<BlockType>::~MemoryManager()
 	{
 		allocatedBlockCount_ = 0;
 	}
 
 	template<typename BlockType>
-    BlockType* MemoryManager<BlockType>::allocateMemory()
+	BlockType* MemoryManager<BlockType>::allocateMemory()
 	{
 		allocatedBlockCount_++;
 		return new BlockType();
 	}
 
 	template<typename BlockType>
-    void MemoryManager<BlockType>::releaseMemory(BlockType* pointer)
+	void MemoryManager<BlockType>::releaseMemory(BlockType* pointer)
 	{
 		allocatedBlockCount_--;
 		delete pointer;
 	}
 
 	template<typename BlockType>
-    void MemoryManager<BlockType>::releaseAndSetNull(BlockType*& pointer)
+	void MemoryManager<BlockType>::releaseAndSetNull(BlockType*& pointer)
 	{
 		releaseMemory(pointer);
 		pointer = nullptr;
 	}
 
 	template<typename BlockType>
-    size_t MemoryManager<BlockType>::getAllocatedBlockCount() const
+	size_t MemoryManager<BlockType>::getAllocatedBlockCount() const
 	{
 		return allocatedBlockCount_;
 	}
