@@ -135,6 +135,7 @@ namespace ds::utils
     template <class List>
     void ListRemoveAnalyzer<List>::executeOperation(List& structure)
     {
-       //
+        auto rmPosition = std::next(structure.begin(), this->getRandomIndex());
+        structure.erase(rmPosition);
     }
 }

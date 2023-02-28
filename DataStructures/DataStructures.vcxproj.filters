@@ -132,9 +132,6 @@
     <ClInclude Include="libds\amt\implicit_sequence.h">
       <Filter>libds\amt</Filter>
     </ClInclude>
-    <ClInclude Include="libds\amt\network.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
     <ClInclude Include="libds\amt\sequence.h">
       <Filter>libds\amt</Filter>
     </ClInclude>
@@ -191,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="tests\adt\tree.test.h">
       <Filter>tests\adt</Filter>
+    </ClInclude>
+    <ClInclude Include="libds\amt\network.h">
+      <Filter>libds\amt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
