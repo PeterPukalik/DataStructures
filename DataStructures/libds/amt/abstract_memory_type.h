@@ -47,7 +47,7 @@ namespace ds::amt {
 
 	template<typename BlockType>
 	class AbstractMemoryStructure :
-		virtual public AMT
+		virtual public AMT //dedenie blokov resp len jedno dedenie 
 	{
 	public:
 		AbstractMemoryStructure(mm::MemoryManager<BlockType>* memoryManager);

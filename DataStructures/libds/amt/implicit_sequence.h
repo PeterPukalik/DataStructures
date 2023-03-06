@@ -113,7 +113,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return this->getMemoryManager()->calculateIndex(block);
 	}
 
 	template<typename DataType>
@@ -121,23 +121,19 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return size() > 0 ? &this->getMemoryManager()->getBlockAt(0) : nullptr;
 	}
 
 	template<typename DataType>
     MemoryBlock<DataType>* ImplicitSequence<DataType>::accessLast() const
 	{
-		// TODO 03
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return size() > 0 ? &this->getMemoryManager()->getBlockAt(size() - 1) : nullptr;
 	}
 
 	template<typename DataType>
     MemoryBlock<DataType>* ImplicitSequence<DataType>::access(size_t index) const
 	{
-		// TODO 03
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return index < size() ? &this->getMemoryManager()->getBlockAt(index) : nullptr;
 	}
 
 	template<typename DataType>
@@ -145,15 +141,19 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		auto indexCurrent = indexOfNext(this->getMemoryManager()->calculateIndex(block));
+		return indexCurrent != INVALID_INDEX ? &this->getMemoryManager()->getBlockAt(indexCurrent) : nullptr;
+		//return indexCurrent < size() ? &this->getMemoryManager()->getBlockAt(indexCurrent) : nullptr;
+		
 	}
 
 	template<typename DataType>
     MemoryBlock<DataType>* ImplicitSequence<DataType>::accessPrevious(const MemoryBlock<DataType>& block) const
 	{
-		// TODO 03
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		auto indexCurrent = indexOfPrevious(this->getMemoryManager()->calculateIndex(block));
+		return indexCurrent != INVALID_INDEX ? &this->getMemoryManager()->getBlockAt(indexCurrent) : nullptr;
+		//return indexCurrent >= 0 ? &this->getMemoryManager()->getBlockAt(indexCurrent) : nullptr;
+		
 	}
 
 	template<typename DataType>
@@ -161,7 +161,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return *this->getMemoryManager()->allocateMemoryAt(0);
 	}
 
 	template<typename DataType>
@@ -169,7 +169,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return *this->getMemoryManager()->allocateMemory();
 	}
 
 	template<typename DataType>
@@ -177,7 +177,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return *this->getMemoryManager()->allocateMemoryAt(index);
 	}
 
 	template<typename DataType>
@@ -185,7 +185,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return *this->getMemoryManager()->allocateMemoryAt(this->getMemoryManager()->calculateIndex(block) + 1);
 	}
 
 	template<typename DataType>
@@ -193,7 +193,8 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return *this->getMemoryManager()->allocateMemoryAt(this->getMemoryManager()->calculateIndex(block));
+
 
 	}
 
@@ -202,7 +203,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		this->getMemoryManager()->releaseMemoryAt(0);
 	}
 
 	template<typename DataType>
@@ -210,7 +211,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		this->getMemoryManager()->releaseMemory();
 	}
 
 	template<typename DataType>
@@ -218,7 +219,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		this->getMemoryManager()->releaseMemoryAt(index);
 	}
 
 	template<typename DataType>
@@ -226,7 +227,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		this->getMemoryManager()->releaseMemoryAt(indexOfNext(this->getMemoryManager()->calculateIndex(block)));
 	}
 
 	template<typename DataType>
@@ -234,7 +235,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		this->getMemoryManager()->releaseMemoryAt(indexOfPrevious(this->getMemoryManager()->calculateIndex(block)));
 	}
 
 	template<typename DataType>
@@ -242,7 +243,7 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		this->getMemoryManager()->changeCapacity(capacity);
 	}
 
 	template<typename DataType>
@@ -250,7 +251,9 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+
+		//return currentIndex >= size() - 1 ? INVALID_INDEX : currentIndex + 1;
+		return currentIndex >= size() - 1 ? INVALID_INDEX : currentIndex + 1;
 	}
 
 	template<typename DataType>
@@ -258,7 +261,14 @@ namespace ds::amt {
 	{
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		//if (currentIndex <= 0) {
+			//return -1;
+		//}
+		//else {
+			//return currentIndex--;
+		//}
+		//return currentIndex == 0 ? INVALID_INDEX : currentIndex - 1;
+		return currentIndex == 0 ? INVALID_INDEX : currentIndex - 1;
 	}
 
     template <typename DataType>

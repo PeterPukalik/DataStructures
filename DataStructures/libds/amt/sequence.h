@@ -29,7 +29,7 @@ namespace ds::amt {
 		virtual void removeNext(const BlockType& block) = 0;
 		virtual void removePrevious(const BlockType& block) = 0;
 
-		virtual void processAllBlocksForward(std::function<void(BlockType*)> operation) const;
+		virtual void processAllBlocksForward(std::function<void(BlockType*)> operation) const;// nieco spravit so vsetkymi v sekvencii
 		virtual void processAllBlocksBackward(std::function<void(BlockType*)> operation) const;
 		virtual void processBlocksForward(BlockType* block, std::function<void(BlockType*)> operation) const;
 		virtual void processBlocksBackward(BlockType* block, std::function<void(BlockType*)> operation) const;
