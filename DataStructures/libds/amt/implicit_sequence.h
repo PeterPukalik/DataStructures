@@ -292,23 +292,22 @@ namespace ds::amt {
     {
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		++position_;
+		return *this;
     }
 
     template <typename DataType>
     auto ImplicitSequence<DataType>::ImplicitSequenceIterator::operator++(int) -> ImplicitSequenceIterator
     {
 		ImplicitSequenceIterator tmp(*this);
-	    operator++();
+	    this->operator++();
 	    return tmp;
     }
 
     template <typename DataType>
     bool ImplicitSequence<DataType>::ImplicitSequenceIterator::operator==(const ImplicitSequenceIterator& other) const
     {
-		// TODO 03
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return position_ == other.position_;//&& sequence_ == other.sequence_; //sekvencie nemusim porovnavat
     }
 
     template <typename DataType>
@@ -322,7 +321,7 @@ namespace ds::amt {
     {
 		// TODO 03
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return sequence_->access(position_)->data_;
     }
 
     template <typename DataType>
@@ -353,16 +352,15 @@ namespace ds::amt {
     size_t CyclicImplicitSequence<DataType>::indexOfNext(size_t currentIndex) const
 	{
 		// TODO 03
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		const size_t size = this->size();
+		return size != 0 ? currentIndex >= size - 1 ? 0 : currentIndex + 1 : INVALID_INDEX;
 	}
 
 	template<typename DataType>
     size_t CyclicImplicitSequence<DataType>::indexOfPrevious(size_t currentIndex) const
 	{
-		// TODO 03
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		const size_t size = this->size();
+		return size != 0 ? currentIndex <= 0 ? size - 1 : currentIndex - 1 : INVALID_INDEX;
 	}
 
 }

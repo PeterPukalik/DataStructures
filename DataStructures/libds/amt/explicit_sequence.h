@@ -175,6 +175,8 @@ namespace ds::amt {
 		// TODO 04
 		// po implementacii vymazte vyhodenie vynimky!
 		// throw std::runtime_error("Not implemented yet");
+		this->clear();
+		//finalizuj pedka automaticky
 	}
 
 	template<typename BlockType>
@@ -199,23 +201,67 @@ namespace ds::amt {
 	{
 		// TODO 04
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		/*throw std::runtime_error("Not implemented yet");*/
+
+
+		last_ = first_;
+		while (first_ != nullptr) {
+			first_ = accessNext(*first_);
+			this->memoryManager_->releaseMemory(last_);
+			last_ = first_;
+		}
+
 	}
 
 	template<typename BlockType>
     bool ExplicitSequence<BlockType>::equals(const AMT& other)
 	{
-		// TODO 04
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+
+		if (this == &other) {
+			return true;
+		}
+		//const treba pridat kvoli tomu ze v parametri je const
+		//ExplicitSequence < BlockType>* otherES = dynamic_cast<ExplicitSequence<BlockType>*>(other);// s * kvoli zlemu castu aby sme nemuseli pouzivat try catch ale len porovnat nullptr
+		auto* otherES = dynamic_cast<const ExplicitSequence<BlockType>*>(&other);// s * kvoli zlemu castu aby sme nemuseli pouzivat try catch ale len porovnat nullptr
+		if (otherES == nullptr) {
+			return false;
+		}
+
+		//return this->size() != otherES.size() ? false;
+
+		if (this->size() != otherES->size()) {
+			return false;
+		}
+		auto myCurrent = first_;
+		auto otherCurrent = otherES->first_;
+		while (myCurrent != nullptr) {
+			//return (!(myCurrent->data_ == otherCurrent->data_))
+			if (myCurrent->data_ != otherCurrent->data_) {
+				return false;
+			}
+			else {
+				myCurrent = this->accessNext(*myCurrent);
+				otherCurrent = otherES->accessNext(*otherCurrent);
+			}
+		
+		}
+		return true;
+
+
 	}
 
 	template<typename BlockType>
-    size_t ExplicitSequence<BlockType>::calculateIndex(BlockType& data)
+	size_t ExplicitSequence<BlockType>::calculateIndex(BlockType& data) //toto vyuzit v semestralke resp takto podobne
 	{
-		// TODO 04
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		size_t counter = 0;
+		BlockType* block = this->findBlockWithProperty([&counter, data](BlockType* b) // do lambdy treba dat adresy lebo on berie kopie
+			{
+				++counter; // treba davat pozor na poradie a return
+				return b == &data ;
+			}
+		);
+
+		return block == nullptr ? INVALID_INDEX : counter - 1;
 	}
 
 	template<typename BlockType>
@@ -233,9 +279,15 @@ namespace ds::amt {
 	template<typename BlockType>
     BlockType* ExplicitSequence<BlockType>::access(size_t index) const
 	{
-		// TODO 04
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		BlockType* result = nullptr;
+		if (index < this->size()) {
+			result = first_;
+			for (int i = 1; i < index-1; ++i)
+			{
+				result = static_cast<BlockType*>(result->next_);
+			}
+		}
+		return result;
 	}
 
 	template<typename BlockType>
@@ -368,22 +420,22 @@ namespace ds::amt {
     {
 		// TODO 04
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		position_ = static_cast<BlockType*>(position_->next_);
+		return *this;
     }
 
     template <typename BlockType>
     auto ExplicitSequence<BlockType>::ExplicitSequenceIterator::operator++(int) -> ExplicitSequenceIterator
     {
-		ExplicitSequenceIterator tmp(*this); operator++();
+		ExplicitSequenceIterator tmp(*this); 
+		this->operator++();
 	    return tmp;
     }
 
     template <typename BlockType>
     bool ExplicitSequence<BlockType>::ExplicitSequenceIterator::operator==(const ExplicitSequenceIterator& other) const
     {
-		// TODO 04
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return position_ == other.position_;
     }
 
     template <typename BlockType>
@@ -395,9 +447,7 @@ namespace ds::amt {
     template <typename BlockType>
     typename ExplicitSequence<BlockType>::DataType& ExplicitSequence<BlockType>::ExplicitSequenceIterator::operator*()
     {
-		// TODO 04
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return position_->data_;
     }
 
     template <typename BlockType>
