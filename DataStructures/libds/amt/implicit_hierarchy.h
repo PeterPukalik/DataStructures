@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include <libds/amt/abstract_memory_type.h>
 #include <libds/amt/hierarchy.h>
@@ -74,9 +74,9 @@ namespace ds::amt {
 	template<typename DataType, size_t K>
     size_t ImplicitHierarchy<DataType, K>::level(const MemoryBlock<DataType>& node) const
 	{
-		// TODO 05
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return level(this->getMemoryManager()->calculateIndex(node));
+
+		
 	}
 
 	template<typename DataType, size_t K>
@@ -194,7 +194,7 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return (0 == index) ? INVALID_INDEX : (index - 1) / K;
 	}
 
 	template<typename DataType, size_t K>
@@ -208,7 +208,7 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return K * indexOfParent + sonOrder + 1;
 	}
 
 }

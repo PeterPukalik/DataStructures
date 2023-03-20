@@ -20,8 +20,8 @@ namespace ds::amt {
 		virtual BlockType& insertFirst() = 0;
 		virtual BlockType& insertLast() = 0;
 		virtual BlockType& insert(size_t index) = 0;
-		virtual BlockType& insertAfter(const BlockType& block) = 0;
-		virtual BlockType& insertBefore(const BlockType& block) = 0;
+		virtual BlockType& insertAfter(BlockType& block) = 0;
+		virtual BlockType& insertBefore(BlockType& block) = 0;
 
 		virtual void removeFirst() = 0;
 		virtual void removeLast() = 0;
@@ -29,7 +29,7 @@ namespace ds::amt {
 		virtual void removeNext(const BlockType& block) = 0;
 		virtual void removePrevious(const BlockType& block) = 0;
 
-		virtual void processAllBlocksForward(std::function<void(BlockType*)> operation) const;// nieco spravit so vsetkymi v sekvencii
+		virtual void processAllBlocksForward(std::function<void(BlockType*)> operation) const;
 		virtual void processAllBlocksBackward(std::function<void(BlockType*)> operation) const;
 		virtual void processBlocksForward(BlockType* block, std::function<void(BlockType*)> operation) const;
 		virtual void processBlocksBackward(BlockType* block, std::function<void(BlockType*)> operation) const;
@@ -38,19 +38,19 @@ namespace ds::amt {
 	};
 
 	template<typename BlockType>
-    void Sequence<BlockType>::processAllBlocksForward(std::function<void(BlockType*)> operation) const
+	void Sequence<BlockType>::processAllBlocksForward(std::function<void(BlockType*)> operation) const
 	{
 		processBlocksForward(accessFirst(), operation);
 	}
 
 	template<typename BlockType>
-    void Sequence<BlockType>::processAllBlocksBackward(std::function<void(BlockType*)> operation) const
+	void Sequence<BlockType>::processAllBlocksBackward(std::function<void(BlockType*)> operation) const
 	{
 		processBlocksBackward(accessLast(), operation);
 	}
 
 	template<typename BlockType>
-    void Sequence<BlockType>::processBlocksForward(BlockType* block, std::function<void(BlockType*)> operation) const
+	void Sequence<BlockType>::processBlocksForward(BlockType* block, std::function<void(BlockType*)> operation) const
 	{
 		while (block != nullptr)
 		{
@@ -60,7 +60,7 @@ namespace ds::amt {
 	}
 
 	template<typename BlockType>
-    void Sequence<BlockType>::processBlocksBackward(BlockType* block, std::function<void(BlockType*)> operation) const
+	void Sequence<BlockType>::processBlocksBackward(BlockType* block, std::function<void(BlockType*)> operation) const
 	{
 		while (block != nullptr)
 		{
@@ -70,7 +70,7 @@ namespace ds::amt {
 	}
 
 	template<typename BlockType>
-    BlockType* Sequence<BlockType>::findBlockWithProperty(std::function<bool(BlockType*)> predicate) const
+	BlockType* Sequence<BlockType>::findBlockWithProperty(std::function<bool(BlockType*)> predicate) const
 	{
 		BlockType* block = accessFirst();
 
@@ -83,7 +83,7 @@ namespace ds::amt {
 	}
 
 	template<typename BlockType>
-    BlockType* Sequence<BlockType>::findPreviousToBlockWithProperty(std::function<bool(BlockType*)> predicate) const
+	BlockType* Sequence<BlockType>::findPreviousToBlockWithProperty(std::function<bool(BlockType*)> predicate) const
 	{
 		BlockType* blockWithProperty = accessFirst();
 

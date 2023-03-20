@@ -195,7 +195,14 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+
+		size_t counter = 1;//uroven
+		auto parent = accessParent(node);
+		while (parent != nullptr) {
+			counter++;
+			parent = accessParent(*parent);
+		}
+		return counter;
 	}
 
 	template<typename BlockType>
@@ -219,7 +226,7 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return accessParent(node) == nullptr;
 	}
 
 	template<typename BlockType>
@@ -227,15 +234,15 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		auto parent = accessParent(node);
+		return parent != nullptr && accessSon(*parent, sonOrder) == &node;
 	}
 
 	template<typename BlockType>
     bool Hierarchy<BlockType>::isLeaf(const BlockType& node) const
 	{
 		// TODO 05
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return degree(node) == 0;
 	}
 
 	template<typename BlockType>
@@ -243,15 +250,28 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		return accessSon(node, sonOrder) != nullptr;
 	}
 
 	template<typename BlockType>
     void Hierarchy<BlockType>::processPreOrder(const BlockType* node, std::function<void(const BlockType*)> operation) const
 	{
 		// TODO 05
-		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		if (node != nullptr) {
+			operation(node);
+			size_t deg = degree(*node);
+			size_t numberOfProcessedSons = 0;
+			size_t n = 0;//index son
+			while(deg < numberOfProcessedSons)
+			{
+				auto son = accessSon(*node, n);
+				if (son != nullptr) {
+					processPreOrder(son, operation);
+					++numberOfProcessedSons;
+				}
+				++n;
+			}
+		}
 	}
 
 	template<typename BlockType>
@@ -433,7 +453,16 @@ namespace ds::amt {
 	{
 		// TODO 05
 		// po implementacii vymazte vyhodenie vynimky!
-		throw std::runtime_error("Not implemented yet");
+		if (tryFindNextSonInCurrentPosition()) {
+			savePosition(currentPosition_->currentSon_);
+		}
+		else {
+			removePosition();
+			if (currentPosition_ != nullptr) {
+				++(*this);
+			}
+		}
+		return *this;
 	}
 
 	template<typename BlockType>
