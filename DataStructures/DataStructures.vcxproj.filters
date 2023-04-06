@@ -111,30 +111,6 @@
     <ClInclude Include="libds\adt\sorts.h">
       <Filter>libds\adt</Filter>
     </ClInclude>
-    <ClInclude Include="libds\amt\abstract_memory_type.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\explicit_hierarchy.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\explicit_network.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\explicit_sequence.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\hierarchy.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\implicit_hierarchy.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\implicit_sequence.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
-    <ClInclude Include="libds\amt\sequence.h">
-      <Filter>libds\amt</Filter>
-    </ClInclude>
     <ClInclude Include="libds\constants.h">
       <Filter>libds</Filter>
     </ClInclude>
@@ -189,7 +165,31 @@
     <ClInclude Include="tests\adt\tree.test.h">
       <Filter>tests\adt</Filter>
     </ClInclude>
-    <ClInclude Include="libds\amt\network.h">
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\abstract_memory_type.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\explicit_hierarchy.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\explicit_network.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\explicit_sequence.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\hierarchy.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\implicit_hierarchy.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\implicit_sequence.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\network.h">
+      <Filter>libds\amt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\sequence.h">
       <Filter>libds\amt</Filter>
     </ClInclude>
   </ItemGroup>

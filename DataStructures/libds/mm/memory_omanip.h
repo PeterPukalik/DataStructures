@@ -22,7 +22,7 @@ namespace ds::mm {
 	};
 
 	template<typename DataType>
-    PtrPrint<DataType>::PtrPrint(const DataType* ptr, int base, int width) :
+	PtrPrint<DataType>::PtrPrint(const DataType* ptr, int base, int width) :
 		ptr_(ptr)
 	{
 		oss_ << std::setbase(base) << std::setw(width);
@@ -36,7 +36,7 @@ namespace ds::mm {
 	}
 
 	template<typename DataType>
-    PtrPrintBin<DataType>::PtrPrintBin(const DataType* ptr) :
+	PtrPrintBin<DataType>::PtrPrintBin(const DataType* ptr) :
 		PtrPrint<DataType>(ptr, 2, 8)
 	{
 	}

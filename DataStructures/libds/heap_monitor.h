@@ -6,7 +6,7 @@
 template<typename T>
 T* placement_new(T* address)
 {
-	return new (address) T();
+    return new (address) T();
 }
 
 /**
@@ -15,7 +15,7 @@ T* placement_new(T* address)
 template<typename T>
 T* placement_copy(T* address, const T& origin)
 {
-	return new (address) T(origin);
+    return new (address) T(origin);
 }
 
 #if (defined(_WIN32) || defined(_WIN64)) \
