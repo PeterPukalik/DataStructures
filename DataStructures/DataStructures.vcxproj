@@ -155,15 +155,6 @@
     <ClCompile Include="tests\_details\test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\abstract_memory_type.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\explicit_hierarchy.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\explicit_network.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\explicit_sequence.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\hierarchy.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\implicit_hierarchy.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\implicit_sequence.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\network.h" />
-    <ClInclude Include="..\..\..\..\..\Downloads\AUS-VS2022 (2)\AUS-VS2022\DataStructures\DataStructures\libds\amt\sequence.h" />
     <ClInclude Include="libds\adt\abstract_data_type.h" />
     <ClInclude Include="libds\adt\array.h" />
     <ClInclude Include="libds\adt\list.h" />
@@ -175,6 +166,15 @@
     <ClInclude Include="libds\adt\tree.h" />
     <ClInclude Include="complexities\complexity_analyzer.h" />
     <ClInclude Include="complexities\list_analyzer.h" />
+    <ClInclude Include="libds\amt\abstract_memory_type.h" />
+    <ClInclude Include="libds\amt\explicit_hierarchy.h" />
+    <ClInclude Include="libds\amt\explicit_network.h" />
+    <ClInclude Include="libds\amt\explicit_sequence.h" />
+    <ClInclude Include="libds\amt\hierarchy.h" />
+    <ClInclude Include="libds\amt\implicit_hierarchy.h" />
+    <ClInclude Include="libds\amt\implicit_sequence.h" />
+    <ClInclude Include="libds\amt\network.h" />
+    <ClInclude Include="libds\amt\sequence.h" />
     <ClInclude Include="libds\constants.h" />
     <ClInclude Include="libds\heap_monitor.h" />
     <ClInclude Include="libds\mm\compact_memory_manager.h" />

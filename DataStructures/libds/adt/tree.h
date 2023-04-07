@@ -1,4 +1,4 @@
-#pragma once
+    #pragma once
 
 #include <libds/adt/abstract_data_type.h>
 #include <libds/amt/implicit_hierarchy.h>
