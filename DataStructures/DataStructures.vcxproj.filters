@@ -196,4 +196,7 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\..\..\..\Downloads\ds.natvis" />
+  </ItemGroup>
 </Project>
