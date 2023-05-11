@@ -584,13 +584,13 @@ namespace ds::amt {
 	template <typename DataType>
 	bool BinaryExplicitHierarchy<DataType>::isLeftSon(const BlockType& node) const
 	{
-		return node.parent_ != nullptr && this->accessLeftSon(*node.parent_) == &node;
+		return node.parent_ != nullptr && this->accessLeftSon(*this->accessParent(node)) == &node;
 	}
 
 	template <typename DataType>
 	bool BinaryExplicitHierarchy<DataType>::isRightSon(const BlockType& node) const
 	{
-		return node.parent_ != nullptr && this->accessRightSon(*node.parent_) == &node;
+		return node.parent_ != nullptr && this->accessRightSon(*this->accessParent(node)) == &node;
 	}
 
 	template <typename DataType>

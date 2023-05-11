@@ -123,33 +123,48 @@ namespace ds::adt {
     template<typename T>
     bool ImplicitQueue<T>::equals(const ADT& other)
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        const ImplicitQueue<T>* otherQueue = dynamic_cast<const ImplicitQueue<T>*>(&other);
+        if (this == &otherQueue) {
+            return true;
+        }
+        if (size() != otherQueue->size()) {
+            return false;
+        }
+        if (otherQueue == nullptr) {
+            
+        }
     }
 
     template<typename T>
     void ImplicitQueue<T>::push(T element)
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        if (size() = this->getSequence()->size()) {
+            error("queue capacity is full");
+        }
+        this->getSequence()->access(insertionIndex_)->data_ = element;
+        insertionIndex_ = this->getSequence()->indexOfNext(insertionIndex_);
+        size_++;
     }
 
     template<typename T>
     T& ImplicitQueue<T>::peek()
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        if (isEmpty()) {
+            error("queue is empty");
+        }
+        return this->getSequence()->access(insertionIndex_)->data_;
     }
 
     template<typename T>
     T ImplicitQueue<T>::pop()
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        if (isEmpty()) {
+            error("queue is empty");
+        }
+        auto result = getSequence()->access(insertionIndex_)->data_;
+        insertionIndex_ = getSequence()->indexOfNext(insertionIndex_);
+        --size_;
+        return result;
     }
 
     template<typename T>
@@ -173,25 +188,27 @@ namespace ds::adt {
     template<typename T>
     void ExplicitQueue<T>::push(T element)
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        this->getSequence()->insertLast()->data_ = element;
     }
 
     template<typename T>
     T& ExplicitQueue<T>::peek()
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        if (isEmpty()) {
+            throw std::range_error("Stack is empty");
+        }
+        return this->getSequence()->accessFirst()->data_;
     }
 
     template<typename T>
     T ExplicitQueue<T>::pop()
     {
-        // TODO 09
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        if (isEmpty()) {
+            throw std::range_error("Stack is empty");
+        }
+        auto result = this->getSequence()->accessFirst()->data_;
+        this->getSequence()->removeFirst();
+        return result;
     }
 
     template<typename T>

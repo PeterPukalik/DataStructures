@@ -192,6 +192,9 @@
     <ClInclude Include="libds\amt\sequence.h">
       <Filter>libds\amt</Filter>
     </ClInclude>
+    <ClInclude Include="complexities\table_analyzer.h">
+      <Filter>libds</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
