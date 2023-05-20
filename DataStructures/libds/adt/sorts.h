@@ -19,6 +19,16 @@ namespace ds::adt
         void sort(amt::ImplicitSequence<T>& is) { sort(is, [](const T& a, const T& b)->bool {return a < b; }); }
     };
 
+
+
+    template <typename T>
+    struct SortVector
+    {
+    public:
+        virtual void sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare) = 0;
+        void sort(std::vector<T>& is) { sort(is, [](const T& a, const T& b)->bool {return a < b; }); }
+    };
+
     template <typename T>
     class SelectSort :
         public Sort<T>
@@ -64,13 +74,13 @@ namespace ds::adt
 
     template <typename T>
     class ShellSort :
-        public Sort<T>
+        public SortVector<T>
     {
     public:
-        void sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare) override;
+        void sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare) override;
 
     private:
-        void shell(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t k);
+        void shell(std::vector<T>& is, std::function<bool(const T&, const T&)> compare, size_t k);
     };
 
     template <typename Key, typename T>
@@ -156,9 +166,31 @@ namespace ds::adt
     template<typename T>
     void QuickSort<T>::quick(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t min, size_t max)
     {
-        // TODO 12
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        auto pivot = is.access(min + (max - min) / 2)->data_;
+        auto left = min;
+        auto right = max;
+        do {
+            while (compare(is.access(left)->data_,pivot)) {
+                ++left;
+            }
+            while (right > 0 && compare(pivot, is.access(right)->data_)) {
+                --right;
+            }
+            if (left <= right) {
+                std::swap(is.access(left)->data_, is.access(right)->data_);
+                ++left;
+                if (right > 0) {
+                    --right;
+                }
+            }
+        
+        } while (left <= right);
+        if (min < right) {
+            quick(is, compare, min, right);
+        }
+        if (left < max) {
+            quick(is, compare, left, max);
+        }
     }
 
     template<typename T>
@@ -170,17 +202,28 @@ namespace ds::adt
     }
 
     template<typename T>
-    void ShellSort<T>::sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare)
+    void ShellSort<T>::sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare)
     {
         shell(is, compare, std::log10(is.size()));
     }
 
     template<typename T>
-    void ShellSort<T>::shell(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t k)
+    void ShellSort<T>::shell(std::vector<T>& is, std::function<bool(const T&, const T&)> compare, size_t k)
     {
-        // TODO 12
-        // po implementacii vymazte vyhodenie vynimky!
-        throw std::runtime_error("Not implemented yet");
+        for (size_t d = 0; d < k; d++)
+        {
+            for (size_t i = 0; i <= is.size() -1 ; i++)
+            {
+                int j = i;
+                while (j >= k && j - k >= d && compare(is.at(j), is.at(j - k))) {
+                    std::swap(is.at(j), is.at(j - k));
+                    j = j - k;
+                }
+            }
+        }
+        if (k > 1) {
+            shell(is, compare, k - 1);
+        }
     }
 
     template<typename Key, typename T>

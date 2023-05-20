@@ -6,6 +6,7 @@
 #include <libds/amt/explicit_hierarchy.h>
 #include <functional>
 #include <random>
+#include <string>
 
 namespace ds::adt {
 
@@ -14,8 +15,8 @@ namespace ds::adt {
     {
         K key_;
         T data_;
-
         bool operator==(const TableItem<K, T>& other) { return key_ == other.key_ && data_ == other.data_; }
+        std::vector<T> synonyms_;
     };
 
     template <typename K, typename T>
@@ -214,7 +215,9 @@ namespace ds::adt {
         bool isEmpty() const override;
 
         void insert(K key, T data) override;
+        void insertWithDuplicates(K key, T data);
         bool tryFind(K key, T*& data) override;
+        bool tryFindTabItem(K key, TabItem<K, T>*& data);
         T remove(K key) override;
         void clear() override;
 
@@ -255,6 +258,8 @@ namespace ds::adt {
         public TabItem<K, T>
     {
         int priority_;
+
+
     };
 
     template <typename K, typename T>
@@ -315,7 +320,7 @@ namespace ds::adt {
         if (blockWithKey == nullptr) {
             return false;
         }
-        data = blockWithKey->data_.data_;
+        data = &blockWithKey->data_.data_;
         return true;
     }
 
@@ -371,9 +376,9 @@ namespace ds::adt {
         if (contains(key)) {
             this->error("Key allready exists");
         }
-        auto result = this->getSequence()->insertFirst()->data;
-        result->key_ = key;
-        result->data_ = data;
+        auto result = this->getSequence()->insertFirst().data_;
+        result.key_ = key;
+        result.data_ = data;
     }
 
     template<typename K, typename T>
@@ -401,41 +406,43 @@ namespace ds::adt {
     {
         TabItem<K, T>* dataOfTable;
         if (this->getSequence()->isEmpty()) {
-            dataOfTable = &(this->getSequence()->insertFirst() = data);
+            dataOfTable = &(this->getSequence()->insertFirst().data_);
         }
         else {
             BlockType* blockWithKey = nullptr;
             if (tryFindBlockWithKey(key, 0, this->getSequence()->size(), blockWithKey)) {
                 this->error("table allready have this key");
+                throw structure_error("key allready used in table");
             }
             else {
                 if (key > blockWithKey->data_.key_) {
-                    dataOfTable = &(this->getSequence()->insertAfter(blockWithKey)->data_);
+                    dataOfTable = &(this->getSequence()->insertAfter(*blockWithKey).data_);
                 }
                 else {
-                    dataOfTable = &(this->getSequence()->insertBefore(blockWithKey)->data_);
+                    dataOfTable = &(this->getSequence()->insertBefore(*blockWithKey).data_);
                 }
             }
         }
-        dataOfTable->key = key;
+        dataOfTable->key_ = key;
         dataOfTable->data_ = data;
     }
 
     template<typename K, typename T>
     T SortedSequenceTable<K, T>::remove(K key)
     {
-        auto blockWithkey;
-        if (!tryFindBlockWithKey(key, 0, this->getSequence()->size(), this->blockWithKey(key))) {
+        BlockType* blockWithkey = nullptr;
+        if (!tryFindBlockWithKey(key, 0, this->getSequence()->size(), blockWithkey)) {
             this->error("key not found");
+            throw structure_error("key not found");
         }
-        T result = this->blockWithKey(key)->data_.data_;
-        if (this->getSequence()->accessFirst() == this->blockWithKey(key)) {
+        T result = blockWithkey->data_.data_;
+        if (this->getSequence()->accessFirst() == blockWithkey) {
             this->getSequence()->removeFirst();
         }
         else {
-            this->getSequence()->removeNext(this->getSequence()->accessPrev());
+            this->getSequence()->removeNext(*this->getSequence()->accessPrevious(*blockWithkey));
         }
-
+        return result;
     }
 
     template<typename K, typename T>
@@ -604,10 +611,13 @@ namespace ds::adt {
 
     template <typename K, typename T>
     HashTable<K, T>::HashTableIterator::HashTableIterator
-        (const HashTableIterator& other) :
-        tablesCurrent_(other.tablesCurrent_),
-        tablesLast_(other.tablesLast_),
-        synonymIterator_(other.synonymIterator_)
+    (const HashTableIterator& other) :
+        tablesCurrent_(new PrimaryRegionIterator(*other.tablesCurrent_)),
+        tablesLast_(new PrimaryRegionIterator(*other.tablesLast_)),
+        synonymIterator_(other.synonymIterator_ != nullptr
+            ? new SynonymTableIterator(*other.synonymIterator_)
+            : nullptr
+        )
     {
     }
 
@@ -652,7 +662,7 @@ namespace ds::adt {
     template <typename K, typename T>
     TabItem<K, T>& HashTable<K, T>::HashTableIterator::operator*()
     {
-        return (**synonymIterator_).data_;
+        return (**synonymIterator_);
     }
 
     //----------
@@ -713,12 +723,13 @@ namespace ds::adt {
         BVSNodeType* node = nullptr;
         if (isEmpty()) {
             node = &this->getHierarchy()->emplaceRoot();
-            //this->getHierarchy()->changeRoot(node);
         }
         else {
             BVSNodeType* parentNode = nullptr;
             if (tryFindNodeWithKey(key, parentNode)) {
-                this->error("key allready used in table");
+
+                throw structure_error("key allready used in table");
+
             }
             node = (key > parentNode->data_.key_) ? &getHierarchy()->insertRightSon(*parentNode) : &getHierarchy()->insertLeftSon(*parentNode);
 
@@ -728,6 +739,30 @@ namespace ds::adt {
         ++size_;
         balanceTree(node);
     }
+
+    template<typename K, typename T, typename BlockType>
+    void GeneralBinarySearchTree<K, T, BlockType>::insertWithDuplicates(K key, T data)
+    {
+        BVSNodeType* node = nullptr;
+        if (isEmpty()) {
+            node = &this->getHierarchy()->emplaceRoot();
+        }
+        else {
+            BVSNodeType* parentNode = nullptr;
+            if (tryFindNodeWithKey(key, parentNode)) {
+
+                parentNode->data_.synonyms_.push_back(data);
+                return;
+            }
+            node = (key > parentNode->data_.key_) ? &getHierarchy()->insertRightSon(*parentNode) : &getHierarchy()->insertLeftSon(*parentNode);
+
+        }
+        node->data_.key_ = key;
+        node->data_.data_ = data;
+        ++size_;
+        balanceTree(node);
+    }
+
 
     template<typename K, typename T, typename BlockType>
     bool GeneralBinarySearchTree<K, T, BlockType>::tryFind(K key, T*& data)
@@ -743,11 +778,25 @@ namespace ds::adt {
     }
 
     template<typename K, typename T, typename BlockType>
+    bool GeneralBinarySearchTree<K, T, BlockType>::tryFindTabItem(K key, TabItem<K,T>*& data)
+    {
+        BVSNodeType* node = nullptr;
+        if (!tryFindNodeWithKey(key, node)) {
+            return false;
+        }
+        else {
+            data = &node->data_;
+            return true;
+        }
+    }
+
+    template<typename K, typename T, typename BlockType>
     T GeneralBinarySearchTree<K, T, BlockType>::remove(K key)
     {
         BVSNodeType* node = nullptr;
         if (!tryFindNodeWithKey(key, node)) {
-            this->error("key not found");
+            //this->error("key not found");
+            throw structure_error("key not found");
         }
         T data = node->data_.data_;
         removeNode(node);
@@ -864,7 +913,8 @@ namespace ds::adt {
             return false;
         }
         node = this->getHierarchy()->accessRoot();
-        while (node->data_.key_ != key || !this->getHierarchy()->isLeaf(*node)) {
+        while (node->data_.key_ != key && !this->getHierarchy()->isLeaf(*node)) {
+
             if (key < node->data_.key_) {
                 if (this->getHierarchy()->accessLeftSon(*node) != nullptr) {
                     node = this->getHierarchy()->accessLeftSon(*node);
@@ -884,6 +934,7 @@ namespace ds::adt {
         
         }
         return node->data_.key_ == key;
+        
     }
 
     template<typename K, typename T, typename BlockType>
@@ -956,6 +1007,10 @@ namespace ds::adt {
             }
 
         }
+        
+        ds::adt::GeneralBinarySearchTree<K, T,TreapItem<K,T>>::removeNode(node);
+
+
     }
 
     template<typename K, typename T>

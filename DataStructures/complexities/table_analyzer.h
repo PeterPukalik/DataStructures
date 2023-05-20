@@ -13,18 +13,18 @@ namespace ds::utils
  * @brief Common base for list analyzers.
  */
     template<class List>
-    class TableAnalyzer : public ComplexityAnalyzer<List>
+    class TableAnalyzer : public ComplexityAnalyzer<Table>
     {
     protected:
         explicit TableAnalyzer(const std::string& name);
 
     protected:
-        void beforeOperation(List& structure) override;
+        void beforeOperation(Table& structure) override;
         //size_t getRandomIndex() const;
         int getRandomData() const;
 
     private:
-        void insertNElements(List& list, size_t n);
+        void insertNElements(Table& table, size_t n);
 
     private:
         std::default_random_engine rngData_;
@@ -37,11 +37,11 @@ namespace ds::utils
     /**
      * @brief Analyzes complexity of the insert operation.
      */
-    template<class List>
-    class TableInsertAnalyzer : public TableAnalyzer<List>
+    template<class Table>
+    class TableInsertAnalyzer : public TableAnalyzer<Table>
     {
     public:
-        explicit ListInsertAnalyzer(const std::string& name);
+        explicit TableInsertAnalyzer(const std::string& name);
 
     protected:
         void executeOperation(List& structure) override;

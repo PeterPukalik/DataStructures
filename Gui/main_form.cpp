@@ -16,11 +16,11 @@ std::vector<std::unique_ptr<ds::tests::Test>> createTests()
 	auto adt  = std::make_unique<ds::tests::CompositeTest>("adt");
 
 	//// TODO 02
-	//mm->add_test(std::make_unique<ds::tests::MemoryManagerTest>());
-	//mm->add_test(std::make_unique<ds::tests::CompactMemoryManagerTest>());
+	mm->add_test(std::make_unique<ds::tests::MemoryManagerTest>());
+	mm->add_test(std::make_unique<ds::tests::CompactMemoryManagerTest>());
 
 	//// TODO 03
-	//amt->add_test(std::make_unique<ds::tests::ImplicitSequenceTest>());
+	amt->add_test(std::make_unique<ds::tests::ImplicitSequenceTest>());
 
 	//// TODO 04
 	//amt->add_test(std::make_unique<ds::tests::ExplicitSequenceTest>());
@@ -47,7 +47,7 @@ std::vector<std::unique_ptr<ds::tests::Test>> createTests()
 	adt->add_test(std::make_unique<ds::tests::NonSequenceTableTest>());
 
 	//// TODO 12
-	//adt->add_test(std::make_unique<ds::tests::SortTest>());
+	adt->add_test(std::make_unique<ds::tests::SortTest>());
 
 	root->add_test(std::move(mm));
 	root->add_test(std::move(amt));

@@ -156,10 +156,10 @@ namespace ds::adt {
 	{
 		auto otherArray = dynamic_cast<Array<T>*>(&other);
 		if (otherArray == nullptr) {
-			throw std::inavlid_argument("not array ");
+			throw std::exception("not array ");
 		}
 		if (size() != other.size()) {
-			throw std::inavlid_argument("diffenert size");
+			throw std::exception("diffenert size");
 		}
 		getSequence()->assign(otherArray->getSequence());
 		return *this;

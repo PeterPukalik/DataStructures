@@ -139,7 +139,7 @@ namespace ds::adt {
     void ImplicitQueue<T>::push(T element)
     {
         if (size() = this->getSequence()->size()) {
-            error("queue capacity is full");
+            this->error("queue capacity is full");
         }
         this->getSequence()->access(insertionIndex_)->data_ = element;
         insertionIndex_ = this->getSequence()->indexOfNext(insertionIndex_);
@@ -150,7 +150,7 @@ namespace ds::adt {
     T& ImplicitQueue<T>::peek()
     {
         if (isEmpty()) {
-            error("queue is empty");
+            this->error("queue is empty");
         }
         return this->getSequence()->access(insertionIndex_)->data_;
     }
@@ -159,7 +159,7 @@ namespace ds::adt {
     T ImplicitQueue<T>::pop()
     {
         if (isEmpty()) {
-            error("queue is empty");
+            this->error("queue is empty");
         }
         auto result = getSequence()->access(insertionIndex_)->data_;
         insertionIndex_ = getSequence()->indexOfNext(insertionIndex_);
@@ -194,7 +194,7 @@ namespace ds::adt {
     template<typename T>
     T& ExplicitQueue<T>::peek()
     {
-        if (isEmpty()) {
+        if (this->isEmpty()) {
             throw std::range_error("Stack is empty");
         }
         return this->getSequence()->accessFirst()->data_;
@@ -203,7 +203,7 @@ namespace ds::adt {
     template<typename T>
     T ExplicitQueue<T>::pop()
     {
-        if (isEmpty()) {
+        if (this->isEmpty()) {
             throw std::range_error("Stack is empty");
         }
         auto result = this->getSequence()->accessFirst()->data_;
