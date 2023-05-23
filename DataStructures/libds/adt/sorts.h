@@ -54,6 +54,17 @@ namespace ds::adt
     };
 
     template <typename T>
+    class QuickSortVector :
+        public SortVector<T>
+    {
+    public:
+        void sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare) override;
+
+    private:
+        void quick(std::vector<T>& is, std::function<bool(const T&, const T&)> compare, size_t min, size_t max);
+    };
+
+    template <typename T>
     class QuickSort :
         public Sort<T>
     {
@@ -63,6 +74,7 @@ namespace ds::adt
     private:
         void quick(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t min, size_t max);
     };
+
 
     template <typename T>
     class HeapSort :
@@ -74,13 +86,13 @@ namespace ds::adt
 
     template <typename T>
     class ShellSort :
-        public SortVector<T>
+        public Sort<T>
     {
     public:
-        void sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare) override;
+        void sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare) override;
 
     private:
-        void shell(std::vector<T>& is, std::function<bool(const T&, const T&)> compare, size_t k);
+        void shell(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t k);
     };
 
     template <typename Key, typename T>
@@ -155,29 +167,29 @@ namespace ds::adt
     }
 
     template<typename T>
-    void QuickSort<T>::sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare)
+    void QuickSortVector<T>::sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare)
     {
-        if (!is.isEmpty())
+        if (!is.size()==0)
         {
             quick(is, compare, 0, is.size() - 1);
         }
     }
 
     template<typename T>
-    void QuickSort<T>::quick(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t min, size_t max)
+    void QuickSortVector<T>::quick(std::vector<T>& is, std::function<bool(const T&, const T&)> compare, size_t min, size_t max)
     {
-        auto pivot = is.access(min + (max - min) / 2)->data_;
+        auto pivot = is.at(min + (max - min) / 2);
         auto left = min;
         auto right = max;
         do {
-            while (compare(is.access(left)->data_,pivot)) {
+            while (compare(is.at(left),pivot)) {
                 ++left;
             }
-            while (right > 0 && compare(pivot, is.access(right)->data_)) {
+            while (right > 0 && compare(pivot, is.at(right))) {
                 --right;
             }
             if (left <= right) {
-                std::swap(is.access(left)->data_, is.access(right)->data_);
+                std::swap(is.at(left), is.at(right));
                 ++left;
                 if (right > 0) {
                     --right;
@@ -192,7 +204,44 @@ namespace ds::adt
             quick(is, compare, left, max);
         }
     }
+    template<typename T>
+    void QuickSort<T>::sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare)
+    {
+        if (!is.size() == 0)
+        {
+            quick(is, compare, 0, is.size() - 1);
+        }
+    }
 
+    template<typename T>
+    void QuickSort<T>::quick(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t min, size_t max)
+    {
+        auto pivot = is.access(min + (max - min) / 2)->data_;
+        auto left = min;
+        auto right = max;
+        do {
+            while (compare(is.access(left)->data_, pivot)) {
+                ++left;
+            }
+            while (right > 0 && compare(pivot, is.access(right)->data_)) {
+                --right;
+            }
+            if (left <= right) {
+                std::swap(is.access(left)->data_, is.access(right)->data_);
+                ++left;
+                if (right > 0) {
+                    --right;
+                }
+            }
+
+        } while (left <= right);
+        if (min < right) {
+            quick(is, compare, min, right);
+        }
+        if (left < max) {
+            quick(is, compare, left, max);
+        }
+    }
     template<typename T>
     void HeapSort<T>::sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare)
     {
@@ -202,21 +251,21 @@ namespace ds::adt
     }
 
     template<typename T>
-    void ShellSort<T>::sort(std::vector<T>& is, std::function<bool(const T&, const T&)> compare)
+    void ShellSort<T>::sort(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare)
     {
         shell(is, compare, std::log10(is.size()));
     }
 
     template<typename T>
-    void ShellSort<T>::shell(std::vector<T>& is, std::function<bool(const T&, const T&)> compare, size_t k)
+    void ShellSort<T>::shell(amt::ImplicitSequence<T>& is, std::function<bool(const T&, const T&)> compare, size_t k)
     {
-        for (size_t d = 0; d < k; d++)
+        for (size_t d = 0; d <= k; d++)
         {
             for (size_t i = 0; i <= is.size() -1 ; i++)
             {
                 int j = i;
-                while (j >= k && j - k >= d && compare(is.at(j), is.at(j - k))) {
-                    std::swap(is.at(j), is.at(j - k));
+                while (j >= k && j - k >= d && compare(is.access(j)->data_, is.access(j - k)->data_)) {
+                    std::swap(is.access(j)->data_, is.access(j - k)->data_);
                     j = j - k;
                 }
             }
